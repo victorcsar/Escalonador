@@ -7,7 +7,7 @@ package escalonador;
 
 /**
  *
- * @author VíctorCésar
+ * @author csacl
  */
 public class Escalonador {
 
