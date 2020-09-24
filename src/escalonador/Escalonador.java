@@ -1,5 +1,6 @@
 package escalonador;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 public class Escalonador {
@@ -15,7 +16,7 @@ public class Escalonador {
         executando[0] = true;
         
         //Criação dos Processos.
-        int nProcessos = 2+random.nextInt(19);
+        int nProcessos = 2+random.nextInt(18);
         System.out.println("Foram criados "+nProcessos+" Processos:");
         processos = new Processo[nProcessos];
         for(int i = 0; i<nProcessos; i++){
@@ -40,39 +41,37 @@ public class Escalonador {
             }
         }
         
-        System.out.println("-------------Array-----------");
+        System.out.println("\n-------------Organização temporal dos processos-------------");
         for(Processo p: processos){
             System.out.print(p.idToString()+" ");
         }
-        System.out.println("\n-------------Array-----------");
-        
-        System.out.println("\n \n");
+        System.out.println("\n-------------Organização temporal dos processos-------------\n");
         new Thread(){
-            int time = 0;
             @Override
             public void run(){
-                int time = 0;
                 int idProcesso=0;
-                for(int i = 0; i<=processos[nProcessos-1].getArrival();i++){
+                processor.start(processor);
+                while((idProcesso<nProcessos)&&(processor.getTime()<=processos[nProcessos-1].getArrival())){
                     try {
-                        if(processos[idProcesso].getArrival() == time){
+                        if(processos[idProcesso].getArrival() == processor.getTime()){
                             do{
-                                fila1.add(processos[idProcesso]);
                                 System.out.println("O Processo: "+processos[idProcesso]
-                                        .idToString()+" foi adicionado na fila no Tempo:"+time);
+                                        .idToString()+" foi  adicionado  à  fila no Tempo: "+processor.getTime());
+                                fila1.add(processos[idProcesso]);
                                 idProcesso++;
-                            }while(idProcesso<nProcessos&&processos[idProcesso].getArrival()==time);
+                            }while(idProcesso<nProcessos&&processos[idProcesso].getArrival()==processor.getTime());
                         }
-                        Thread.sleep(1000);
-                        time++;
+                        Thread.sleep(200);
+
                     } catch (InterruptedException ex) {
                         System.out.println("Adicionando processos"+ex);
                     }
                 }
-                System.out.println("-------------------------------------------");
-                System.out.println("Todos os processos foram adicionados à fila");
-                System.out.println("-------------------------------------------");
+                System.out.println("-----------------------------------------------------");
+                System.out.println("     Todos os processos foram adicionados à fila");
+                System.out.println("-----------------------------------------------------");
                 executando[0]=false;
+                this.stop();
             }
         }.start();
         //Chamada dos processos no tempo certo.
@@ -85,11 +84,14 @@ public class Escalonador {
         
        
        while(executando[0]||(!fila1.isEmpty())){
-            if(!fila1.isEmpty()){
-                Processo p = (Processo) fila1.removeFirst();
-                processor.execute(p, p.getExecutionTimeUnits());
+           try{
+               Processo p = (Processo)fila1.removeFirst();
+               //System.out.println("Foi o "+p.idToString());
+               processor.execute(p, p.getExecutionTimeUnits());
+           }catch(NoSuchElementException ex){
            }
-           
        }
+       processor.stop();
+       System.out.println("CPU deligada.");
     }
 }
