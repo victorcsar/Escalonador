@@ -39,4 +39,14 @@ public class Processo {
     public void setExecutedTimeUnits(int executedTimeUnits) {
         this.executedTimeUnits = executedTimeUnits;
     }
+    
+    public int compareTo(Processo o){
+        if(o.getArrival() == this.getArrival())
+            return this.getId().compareTo(o.getId());
+        else
+            return this.arrival - o.getArrival();
+        
+    }
+    
+    
 }
