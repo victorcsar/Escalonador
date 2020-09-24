@@ -1,21 +1,25 @@
 package escalonador;
 
 public class Processo {
-    private final String id;
+    private final int id;
     private int arrival;
     private int executionTimeUnits;
     private int executedTimeUnits;
 
-    public Processo(String id, int arrival, int executionTimeUnits) {
+    public Processo(int id, int arrival, int executionTimeUnits) {
         this.id = id;
         this.arrival = arrival;
         this.executionTimeUnits = executionTimeUnits;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
-
+    
+    public String idToString(){
+        return "P"+this.getId()+(this.getId()>9?"":" ");
+    }
+    
     public int getArrival() {
         return arrival;
     }
@@ -42,10 +46,9 @@ public class Processo {
     
     public int compareTo(Processo o){
         if(o.getArrival() == this.getArrival())
-            return this.getId().compareTo(o.getId());
+            return this.getId()-o.getId();
         else
             return this.arrival - o.getArrival();
-        
     }
     
     

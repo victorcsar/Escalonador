@@ -6,11 +6,11 @@ public class Processador {
     
     public void execute(Processo p, int timeUnits) {
         try{
-            System.out.print(p.getId()+" - ");
-            //Thread t = new Thread();
+            System.out.println("O Processo: "+p.idToString()+" está iniciando execução ");
             Thread.sleep(timeUnits*1000);
-        }catch(InterruptedException e ){
-            System.out.println("Deu ruim");
+            System.out.println("O Processo: "+p.idToString()+" está terminando execução ");
+        }catch(InterruptedException ex ){
+            System.out.println("Processor"+ex);
         }
         
         
