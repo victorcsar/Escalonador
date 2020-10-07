@@ -2,14 +2,47 @@ package escalonador;
 
 public class Processo {
     private final int id;
+    private String state;
     private int arrival;
     private int executionTimeUnits;
     private int executedTimeUnits;
+    private static int processosTerminados;
+    private int remaningQuantumTime;
 
     public Processo(int id, int arrival, int executionTimeUnits) {
         this.id = id;
         this.arrival = arrival;
         this.executionTimeUnits = executionTimeUnits;
+        this.executedTimeUnits = 0;
+        
+    }
+
+    public int getRemaningQuantumTime() {
+        return remaningQuantumTime;
+    }
+
+    public boolean terminou(){
+        return executedTimeUnits >= executionTimeUnits;
+    }
+    
+    public void setRemaningQuantumTime(int remaningQuantumTime) {
+        this.remaningQuantumTime = remaningQuantumTime;
+    }
+    
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+    
+    public static int getProcessosTerminados() {
+        return processosTerminados;
+    }
+    
+    public static void setProcessosTerminados(int processosTerminados) {
+        Processo.processosTerminados = processosTerminados;
     }
 
     public int getId() {
@@ -41,6 +74,8 @@ public class Processo {
     }
 
     public void setExecutedTimeUnits(int executedTimeUnits) {
+        if(executedTimeUnits!=this.executedTimeUnits && executedTimeUnits== this.executionTimeUnits)
+            processosTerminados++;
         this.executedTimeUnits = executedTimeUnits;
     }
     
@@ -50,6 +85,4 @@ public class Processo {
         else
             return this.arrival - o.getArrival();
     }
-    
-    
 }
